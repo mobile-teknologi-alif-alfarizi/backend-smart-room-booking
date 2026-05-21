@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\KampusController;
+use App\Http\Controllers\RuanganController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\ExternalApiController;
@@ -28,5 +30,32 @@ Route::prefix('users')->middleware('auth:api', 'jwt.activity', 'admin')->group(f
     Route::get('{id}', [UserController::class, 'show']);
     Route::put('{id}', [UserController::class, 'update']);
     Route::delete('{id}', [UserController::class, 'destroy']);
+});
+
+// Kampus Management Routes (Admin only)
+Route::prefix('kampus')->middleware('auth:api', 'jwt.activity', 'admin')->group(function () {
+    Route::get('/', [KampusController::class, 'index']);
+    Route::post('/', [KampusController::class, 'store']);
+    Route::get('{id}', [KampusController::class, 'show']);
+    Route::put('{id}', [KampusController::class, 'update']);
+    Route::delete('{id}', [KampusController::class, 'destroy']);
+});
+
+// Ruangan Management Routes (Admin only)
+Route::prefix('ruangan')->middleware('auth:api', 'jwt.activity', 'admin')->group(function () {
+    Route::get('/', [RuanganController::class, 'index']);
+    Route::post('/', [RuanganController::class, 'store']);
+    Route::get('{id}', [RuanganController::class, 'show']);
+    Route::put('{id}', [RuanganController::class, 'update']);
+    Route::delete('{id}', [RuanganController::class, 'destroy']);
+});
+
+// Ruangan Management Routes (Admin only)
+Route::prefix('ruangan')->middleware('auth:api', 'jwt.activity', 'admin')->group(function () {
+    Route::get('/', [RuanganController::class, 'index']);
+    Route::post('/', [RuanganController::class, 'store']);
+    Route::get('{id}', [RuanganController::class, 'show']);
+    Route::put('{id}', [RuanganController::class, 'update']);
+    Route::delete('{id}', [RuanganController::class, 'destroy']);
 });
 

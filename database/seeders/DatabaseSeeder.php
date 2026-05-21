@@ -23,6 +23,8 @@ class DatabaseSeeder extends Seeder
             'nomor_induk' => '12345678',
             'password' => Hash::make('password123'),
             'role' => 'mahasiswa',
+            'fakultas' => 'Fakultas Ilmu Sosial & Bisnis',
+            'program_studi' => 'Hubungan Internasional',
         ]);
 
         User::create([

@@ -39,6 +39,8 @@ Content-Type: application/json
       "name": "John Doe",
       "nomor_induk": "123456789",
       "role": "admin",
+      "fakultas": null,
+      "program_studi": null,
       "created_at": "2024-01-15T10:30:00.000000Z",
       "updated_at": "2024-01-15T10:30:00.000000Z"
     },
@@ -47,6 +49,8 @@ Content-Type: application/json
       "name": "Jane Smith",
       "nomor_induk": "987654321",
       "role": "mahasiswa",
+      "fakultas": "Fakultas Ilmu Sosial & Bisnis",
+      "program_studi": "Hubungan Internasional",
       "created_at": "2024-01-16T14:20:00.000000Z",
       "updated_at": "2024-01-16T14:20:00.000000Z"
     }
@@ -94,6 +98,8 @@ GET /api/users/1
     "name": "John Doe",
     "nomor_induk": "123456789",
     "role": "admin",
+    "fakultas": null,
+    "program_studi": null,
     "created_at": "2024-01-15T10:30:00.000000Z",
     "updated_at": "2024-01-15T10:30:00.000000Z"
   }
@@ -128,7 +134,9 @@ Content-Type: application/json
   "nomor_induk": "111222333",
   "password": "password123",
   "password_confirmation": "password123",
-  "role": "mahasiswa"
+  "role": "mahasiswa",
+  "fakultas": "Fakultas Ilmu Sosial & Bisnis",
+  "program_studi": "Hubungan Internasional"
 }
 ```
 
@@ -140,6 +148,8 @@ Content-Type: application/json
 | password | string | Yes | Password (min 6 char) |
 | password_confirmation | string | Yes | Konfirmasi password (must match) |
 | role | string | Yes | Role: `mahasiswa`, `dosen`, `admin` |
+| fakultas | string | No | Fakultas (hanya untuk role mahasiswa) |
+| program_studi | string | No | Program Studi (hanya untuk role mahasiswa) |
 
 #### Response (Success - 201)
 ```json
@@ -151,6 +161,8 @@ Content-Type: application/json
     "name": "New User",
     "nomor_induk": "111222333",
     "role": "mahasiswa",
+    "fakultas": "Fakultas Ilmu Sosial & Bisnis",
+    "program_studi": "Hubungan Internasional",
     "created_at": "2024-01-17T08:45:00.000000Z"
   }
 }
@@ -197,7 +209,9 @@ Content-Type: application/json
   "nomor_induk": "999888777",
   "password": "newpassword123",
   "password_confirmation": "newpassword123",
-  "role": "dosen"
+  "role": "dosen",
+  "fakultas": "Fakultas Sains & Teknologi",
+  "program_studi": "Informatika"
 }
 ```
 
@@ -216,6 +230,8 @@ PUT /api/users/2
     "name": "Updated Name",
     "nomor_induk": "999888777",
     "role": "dosen",
+    "fakultas": null,
+    "program_studi": null,
     "created_at": "2024-01-16T14:20:00.000000Z",
     "updated_at": "2024-01-17T09:15:00.000000Z"
   }

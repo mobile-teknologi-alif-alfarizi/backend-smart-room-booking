@@ -18,7 +18,7 @@ class UserController extends Controller
     public function index()
     {
         try {
-            $users = User::select('id', 'name', 'nomor_induk', 'role', 'created_at', 'updated_at')
+            $users = User::select('id', 'name', 'nomor_induk', 'role', 'fakultas', 'program_studi', 'created_at', 'updated_at')
                 ->orderBy('created_at', 'desc')
                 ->get();
 
@@ -44,7 +44,7 @@ class UserController extends Controller
     public function show($id)
     {
         try {
-            $user = User::select('id', 'name', 'nomor_induk', 'role', 'created_at', 'updated_at')
+            $user = User::select('id', 'name', 'nomor_induk', 'role', 'fakultas', 'program_studi', 'created_at', 'updated_at')
                 ->find($id);
 
             if (!$user) {
@@ -80,6 +80,8 @@ class UserController extends Controller
                 'nomor_induk' => 'required|string|unique:users,nomor_induk',
                 'password' => 'required|string|min:6|confirmed',
                 'role' => 'required|in:mahasiswa,dosen,admin',
+                'fakultas' => 'nullable|string|max:255',
+                'program_studi' => 'nullable|string|max:255',
             ]);
 
             $user = User::create([
@@ -87,6 +89,8 @@ class UserController extends Controller
                 'nomor_induk' => $request->nomor_induk,
                 'password' => Hash::make($request->password),
                 'role' => $request->role,
+                'fakultas' => $request->role === 'mahasiswa' ? $request->fakultas : null,
+                'program_studi' => $request->role === 'mahasiswa' ? $request->program_studi : null,
             ]);
 
             return response()->json([
@@ -97,6 +101,8 @@ class UserController extends Controller
                     'name' => $user->name,
                     'nomor_induk' => $user->nomor_induk,
                     'role' => $user->role,
+                    'fakultas' => $user->fakultas,
+                    'program_studi' => $user->program_studi,
                     'created_at' => $user->created_at,
                 ],
             ], 201);
@@ -138,6 +144,8 @@ class UserController extends Controller
                 'nomor_induk' => 'sometimes|string|unique:users,nomor_induk,' . $id,
                 'password' => 'sometimes|string|min:6|confirmed',
                 'role' => 'sometimes|in:mahasiswa,dosen,admin',
+                'fakultas' => 'nullable|string|max:255',
+                'program_studi' => 'nullable|string|max:255',
             ]);
 
             if ($request->has('name')) {
@@ -156,6 +164,14 @@ class UserController extends Controller
                 $user->role = $request->role;
             }
 
+            if ($request->has('fakultas')) {
+                $user->fakultas = $request->role === 'mahasiswa' ? $request->fakultas : null;
+            }
+
+            if ($request->has('program_studi')) {
+                $user->program_studi = $request->role === 'mahasiswa' ? $request->program_studi : null;
+            }
+
             $user->save();
 
             return response()->json([
@@ -166,6 +182,8 @@ class UserController extends Controller
                     'name' => $user->name,
                     'nomor_induk' => $user->nomor_induk,
                     'role' => $user->role,
+                    'fakultas' => $user->fakultas,
+                    'program_studi' => $user->program_studi,
                     'created_at' => $user->created_at,
                     'updated_at' => $user->updated_at,
                 ],
