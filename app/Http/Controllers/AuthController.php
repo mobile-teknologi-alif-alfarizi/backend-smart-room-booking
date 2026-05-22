@@ -100,6 +100,8 @@ class AuthController extends Controller
                     'name' => $user->name,
                     'nomor_induk' => $user->nomor_induk,
                     'role' => $user->role,
+                    'fakultas' => $user->fakultas,
+                    'program_studi' => $user->program_studi,
                     'created_at' => $user->created_at,
                 ],
             ], 200);
