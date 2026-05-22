@@ -22,6 +22,7 @@ return [
     'allowed_origins' => [
         'http://localhost:5173',      // Vite dev server (website)
         'http://localhost:3000',      // Alternative dev server
+        'http://localhost:4033',      // Alternative dev server
         'https://ruangin-admin.soundofiwu.com',    // Production website domain
         'https://apiruangints3q67vtombd3ztzr98jkgsu.soundofiwu.com',    // API domain
     ],
