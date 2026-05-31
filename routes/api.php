@@ -53,6 +53,9 @@ Route::prefix('ruangan')->middleware('auth:api', 'jwt.activity', 'admin')->group
     Route::delete('{id}', [RuanganController::class, 'destroy']);
 });
 
+// Public ruangan listing for mobile booking screens.
+Route::get('ruangan/public', [RuanganController::class, 'publicIndex']);
+
 // Smart Booking Routes
 Route::prefix('bookings')->middleware('auth:api', 'jwt.activity')->group(function () {
     Route::get('/', [BookingController::class, 'index']);

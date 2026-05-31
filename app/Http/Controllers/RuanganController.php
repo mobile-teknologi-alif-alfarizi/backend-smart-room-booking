@@ -17,6 +17,15 @@ class RuanganController extends Controller
     }
 
     /**
+     * Public listing of ruangan for mobile clients.
+     */
+    public function publicIndex()
+    {
+        $ruangan = Ruangan::with('kampus')->orderBy('nama_ruangan', 'asc')->get();
+        return response()->json($ruangan);
+    }
+
+    /**
      * Store a newly created ruangan in database.
      */
     public function store(Request $request)
