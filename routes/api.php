@@ -26,6 +26,9 @@ Route::prefix('external')->group(function () {
     Route::get('shiftshift/instance', [ExternalApiController::class, 'getShiftShiftInstance']);
 });
 
+// Public ruangan listing for mobile booking screens.
+Route::get('ruangan/public', [RuanganController::class, 'publicIndex']);
+
 // User Management Routes (Admin only)
 Route::prefix('users')->middleware('auth:api', 'jwt.activity', 'admin')->group(function () {
     Route::get('/', [UserController::class, 'index']);
@@ -52,9 +55,6 @@ Route::prefix('ruangan')->middleware('auth:api', 'jwt.activity', 'admin')->group
     Route::put('{id}', [RuanganController::class, 'update']);
     Route::delete('{id}', [RuanganController::class, 'destroy']);
 });
-
-// Public ruangan listing for mobile booking screens.
-Route::get('ruangan/public', [RuanganController::class, 'publicIndex']);
 
 // Smart Booking Routes
 Route::prefix('bookings')->middleware('auth:api', 'jwt.activity')->group(function () {
