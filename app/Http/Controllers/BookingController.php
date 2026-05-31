@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Booking;
 use App\Models\Notification;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 
@@ -163,6 +164,17 @@ class BookingController extends Controller
                 return response()->json([
                     'success' => false,
                     'message' => 'Booking sudah dibatalkan sebelumnya',
+                ], 422);
+            }
+
+            $bookingDate = Carbon::parse($booking->tanggal)->startOfDay();
+            $today = now()->startOfDay();
+            $latestCancelDate = $bookingDate->copy()->subDays(2);
+
+            if ($today->gt($latestCancelDate)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Pembatalan booking hanya dapat dilakukan maksimal H-2 dari tanggal booking',
                 ], 422);
             }
 
