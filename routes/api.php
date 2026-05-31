@@ -56,7 +56,9 @@ Route::prefix('ruangan')->middleware('auth:api', 'jwt.activity', 'admin')->group
 // Smart Booking Routes
 Route::prefix('bookings')->middleware('auth:api', 'jwt.activity')->group(function () {
     Route::get('/', [BookingController::class, 'index']);
+    Route::get('/my', [BookingController::class, 'myBookings']);
     Route::post('/', [BookingController::class, 'store']);
+    Route::patch('/{id}/cancel', [BookingController::class, 'cancel']);
 });
 
 // Notification Routes

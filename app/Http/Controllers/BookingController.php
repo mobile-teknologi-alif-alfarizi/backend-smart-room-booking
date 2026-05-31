@@ -34,6 +34,33 @@ class BookingController extends Controller
     }
 
     /**
+     * Get bookings for authenticated user.
+     */
+    public function myBookings()
+    {
+        try {
+            $user = auth('api')->user();
+
+            $bookings = Booking::with(['ruangan.kampus'])
+                ->where('user_id', $user->id)
+                ->orderBy('tanggal', 'desc')
+                ->orderBy('waktu_mulai', 'asc')
+                ->get();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Data booking pengguna berhasil diambil',
+                'data' => $bookings,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal mengambil data booking pengguna: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    /**
      * Create new booking.
      */
     public function store(Request $request)
@@ -109,6 +136,59 @@ class BookingController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Gagal membuat booking: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    /**
+     * Cancel booking for authenticated user.
+     */
+    public function cancel($id)
+    {
+        try {
+            $user = auth('api')->user();
+
+            $booking = Booking::where('id', $id)
+                ->where('user_id', $user->id)
+                ->first();
+
+            if (!$booking) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Booking tidak ditemukan',
+                ], 404);
+            }
+
+            if ($booking->status === 'rejected') {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Booking sudah dibatalkan sebelumnya',
+                ], 422);
+            }
+
+            $booking->status = 'rejected';
+            $booking->save();
+
+            Notification::create([
+                'user_id' => $booking->user_id,
+                'booking_id' => $booking->id,
+                'judul' => 'Booking berhasil dibatalkan',
+                'pesan' => 'Booking tanggal ' . $booking->tanggal . ' jam ' . $booking->waktu_mulai . ' - ' . $booking->waktu_selesai . ' telah dibatalkan.',
+                'keterangan' => 'Notifikasi sistem setelah pembatalan booking oleh pengguna',
+                'jenis' => 'booking_success',
+                'sumber' => 'system',
+                'dikirim_pada' => now(),
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Booking berhasil dibatalkan',
+                'data' => $booking->load(['user', 'ruangan.kampus']),
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal membatalkan booking: ' . $e->getMessage(),
             ], 500);
         }
     }
