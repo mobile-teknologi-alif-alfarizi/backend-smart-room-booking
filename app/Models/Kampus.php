@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Kampus extends Model
 {
@@ -12,4 +13,12 @@ class Kampus extends Model
         'nama_kampus',
         'alamat',
     ];
+
+    /**
+     * Get all ruangan in this kampus.
+     */
+    public function ruangan(): HasMany
+    {
+        return $this->hasMany(Ruangan::class);
+    }
 }

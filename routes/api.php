@@ -4,6 +4,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\KampusController;
 use App\Http\Controllers\RuanganController;
+use App\Http\Controllers\BookingController;
+use App\Http\Controllers\NotificationController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\ExternalApiController;
@@ -48,6 +50,26 @@ Route::prefix('ruangan')->middleware('auth:api', 'jwt.activity', 'admin')->group
     Route::get('{id}', [RuanganController::class, 'show']);
     Route::put('{id}', [RuanganController::class, 'update']);
     Route::delete('{id}', [RuanganController::class, 'destroy']);
+});
+
+// Smart Booking Routes
+Route::prefix('bookings')->middleware('auth:api', 'jwt.activity')->group(function () {
+    Route::get('/', [BookingController::class, 'index']);
+    Route::post('/', [BookingController::class, 'store']);
+});
+
+// Notification Routes
+Route::prefix('notifications')->middleware('auth:api', 'jwt.activity')->group(function () {
+    Route::get('/', [NotificationController::class, 'index']);
+    Route::get('unread-count', [NotificationController::class, 'unreadCount']);
+    Route::patch('read-all', [NotificationController::class, 'markAllAsRead']);
+    Route::patch('{id}/read', [NotificationController::class, 'markAsRead']);
+});
+
+// Notification Management Routes (Admin only)
+Route::prefix('notifications')->middleware('auth:api', 'jwt.activity', 'admin')->group(function () {
+    Route::get('admin', [NotificationController::class, 'adminIndex']);
+    Route::post('manual', [NotificationController::class, 'sendManual']);
 });
 
 // Ruangan Management Routes (Admin only)
