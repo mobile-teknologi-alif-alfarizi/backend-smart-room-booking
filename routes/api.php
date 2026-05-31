@@ -28,6 +28,7 @@ Route::prefix('external')->group(function () {
 
 // Public ruangan listing for mobile booking screens.
 Route::get('ruangan/public', [RuanganController::class, 'publicIndex']);
+Route::get('kampus/public', [KampusController::class, 'publicIndex']);
 
 // User Management Routes (Admin only)
 Route::prefix('users')->middleware('auth:api', 'jwt.activity', 'admin')->group(function () {

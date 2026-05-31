@@ -20,6 +20,19 @@ class KampusController extends Controller
     }
 
     /**
+     * Public listing of kampus for mobile clients.
+     */
+    public function publicIndex()
+    {
+        $kampus = Kampus::orderBy('nama_kampus', 'asc')->get();
+
+        return response()->json([
+            'success' => true,
+            'data' => $kampus,
+        ]);
+    }
+
+    /**
      * Get single kampus
      */
     public function show($id)
