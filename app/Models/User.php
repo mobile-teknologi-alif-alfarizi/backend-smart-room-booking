@@ -86,4 +86,28 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->hasMany(Notification::class);
     }
+
+    /**
+     * Get all messages sent by the user.
+     */
+    public function sentMessages(): HasMany
+    {
+        return $this->hasMany(Message::class, 'sent_id');
+    }
+
+    /**
+     * Get all messages received by the user.
+     */
+    public function receivedMessages(): HasMany
+    {
+        return $this->hasMany(Message::class, 'receive_id');
+    }
+
+    /**
+     * Get all messages created by the user.
+     */
+    public function createdMessages(): HasMany
+    {
+        return $this->hasMany(Message::class, 'created_by');
+    }
 }

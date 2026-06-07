@@ -6,6 +6,7 @@ use App\Http\Controllers\KampusController;
 use App\Http\Controllers\RuanganController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\MessageController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\ExternalApiController;
@@ -86,5 +87,17 @@ Route::prefix('ruangan')->middleware('auth:api', 'jwt.activity', 'admin')->group
     Route::get('{id}', [RuanganController::class, 'show']);
     Route::put('{id}', [RuanganController::class, 'update']);
     Route::delete('{id}', [RuanganController::class, 'destroy']);
+});
+
+// Chat/Message Routes
+Route::prefix('messages')->middleware('auth:api', 'jwt.activity')->group(function () {
+    Route::get('/', [MessageController::class, 'listConversations']);
+    Route::get('unread-count', [MessageController::class, 'unreadCount']);
+    Route::get('follow-up', [MessageController::class, 'getFollowUpMessages']);
+    Route::get('conversation/{userId}', [MessageController::class, 'getConversation']);
+    Route::post('send', [MessageController::class, 'sendMessage']);
+    Route::patch('{messageId}/seen', [MessageController::class, 'markAsSeen']);
+    Route::patch('conversation/{userId}/seen-all', [MessageController::class, 'markConversationAsSeen']);
+    Route::delete('{messageId}', [MessageController::class, 'deleteMessage']);
 });
 
