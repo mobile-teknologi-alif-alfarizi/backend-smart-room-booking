@@ -299,4 +299,27 @@ class MessageController extends Controller
             ], 500);
         }
     }
+
+    /**
+     * Get all admin users for chat starter
+     */
+    public function getAdmins()
+    {
+        try {
+            $admins = \App\Models\User::where('role', 'admin')
+                ->select('id', 'name', 'nomor_induk', 'role')
+                ->get();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Data admin berhasil diambil',
+                'data' => $admins,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal mengambil data admin: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
 }

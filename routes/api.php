@@ -92,6 +92,7 @@ Route::prefix('ruangan')->middleware('auth:api', 'jwt.activity', 'admin')->group
 // Chat/Message Routes
 Route::prefix('messages')->middleware('auth:api', 'jwt.activity')->group(function () {
     Route::get('/', [MessageController::class, 'listConversations']);
+    Route::get('admins', [MessageController::class, 'getAdmins']);
     Route::get('unread-count', [MessageController::class, 'unreadCount']);
     Route::get('follow-up', [MessageController::class, 'getFollowUpMessages']);
     Route::get('conversation/{userId}', [MessageController::class, 'getConversation']);
