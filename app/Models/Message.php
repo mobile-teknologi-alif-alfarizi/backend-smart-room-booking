@@ -64,6 +64,9 @@ class Message extends Model
     protected function casts(): array
     {
         return [
+            'sent_id' => 'integer',
+            'receive_id' => 'integer',
+            'created_by' => 'integer',
             'status_seen' => 'boolean',
             'seen_at' => 'datetime',
             'created_at' => 'datetime',

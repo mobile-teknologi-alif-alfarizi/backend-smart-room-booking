@@ -58,13 +58,13 @@ class MessageController extends Controller
                 ->latest('created_at')
                 ->get()
                 ->groupBy(function ($message) use ($authUser) {
-                    return $message->sent_id === $authUser->id 
+                    return $message->sent_id == $authUser->id 
                         ? $message->receive_id 
                         : $message->sent_id;
                 })
                 ->map(function ($messages) use ($authUser) {
-                    $lastMessage = $messages->last();
-                    $otherUserId = $lastMessage->sent_id === $authUser->id 
+                    $lastMessage = $messages->first();
+                    $otherUserId = $lastMessage->sent_id == $authUser->id 
                         ? $lastMessage->receive_id 
                         : $lastMessage->sent_id;
                     
@@ -74,7 +74,7 @@ class MessageController extends Controller
 
                     return [
                         'user_id' => $otherUserId,
-                        'user' => $lastMessage->sent_id === $authUser->id 
+                        'user' => $lastMessage->sent_id == $authUser->id 
                             ? $lastMessage->receiver 
                             : $lastMessage->sender,
                         'last_message' => $lastMessage->message,
@@ -83,6 +83,7 @@ class MessageController extends Controller
                         'last_sender_id' => $lastMessage->sent_id,
                     ];
                 })
+                ->sortByDesc('last_message_at')
                 ->values();
 
             return response()->json([
@@ -150,7 +151,7 @@ class MessageController extends Controller
             $message = Message::findOrFail($messageId);
 
             // Verify that authenticated user is the receiver
-            if ($message->receive_id !== $authUser->id) {
+            if ($message->receive_id != $authUser->id) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Anda tidak memiliki akses untuk menandai pesan ini',
@@ -272,7 +273,7 @@ class MessageController extends Controller
             $message = Message::findOrFail($messageId);
 
             // Verify that authenticated user is the sender
-            if ($message->sent_id !== $authUser->id) {
+            if ($message->sent_id != $authUser->id) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Anda hanya bisa menghapus pesan yang Anda kirim',
